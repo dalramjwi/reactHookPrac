@@ -1,5 +1,5 @@
 // React 라이브러리에서 useState Hook 가져오기
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 // Counter 컴포넌트 정의
 function Counter() {
@@ -50,3 +50,29 @@ function ClickLogger() {
 
   return <div>Click anywhere to log to console.</div>; // JSX 반환
 }
+
+// React 라이브러리에서 useContext 및 createContext 함수 가져오기
+
+// MyContext 객체 생성, 기본값 'Hello, World!' 설정
+const MyContext = React.createContext("Hello, World!");
+
+// DisplayValue 컴포넌트 정의
+function DisplayValue() {
+  // useContext Hook 사용하여 MyContext 값 가져오기
+  const value = useContext(MyContext);
+
+  // 가져온 값을 JSX로 반환하여 렌더링
+  return <div>{value}</div>;
+}
+
+// App 컴포넌트 정의
+function App() {
+  return (
+    // MyContext.Provider로 컴포넌트 감싸고 value 속성으로 전달할 값 설정
+    <MyContext.Provider value="Hello, React!">
+      <DisplayValue /> {/* DisplayValue 컴포넌트 사용 */}
+    </MyContext.Provider>
+  );
+}
+
+export default App; // App 컴포넌트를 내보내기
