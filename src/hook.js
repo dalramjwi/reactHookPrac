@@ -95,3 +95,21 @@ const callback = () => {
 // callback 함수 호출하여 콜백 함수 반환
 const cb = callback();
 cb(); // 'Callback executed'
+//!useMemo
+// Vanilla JS에서 메모이제이션을 직접 구현
+
+// memoizedValue 변수를 초기화
+let memoizedValue = null;
+
+// computeExpensiveValue 함수 정의
+const computeExpensiveValue = (a, b) => {
+  // memoizedValue가 null인 경우 계산 수행
+  if (!memoizedValue) {
+    memoizedValue = a + b;
+  }
+  // memoizedValue 반환
+  return memoizedValue;
+};
+
+// 함수 호출하여 결과 값을 콘솔에 출력
+console.log(computeExpensiveValue(1, 2)); // 3
