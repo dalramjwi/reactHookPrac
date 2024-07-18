@@ -37,7 +37,7 @@ const getValue = () => MyContext.value;
 // 함수 호출하여 전역 상태 값 콘솔에 출력
 console.log(getValue()); // 'Hello, World!'
 
-//! useReduce in JS
+//! useReducer in JS
 
 // Vanilla JS 복잡한 상태 관리
 
