@@ -5,6 +5,7 @@ import React, {
   useContext,
   useReducer,
   useCallback,
+  useMemo,
 } from "react";
 
 // // Counter 컴포넌트 정의
@@ -132,33 +133,52 @@ import React, {
 //     </div>
 //   );
 // }
-//!useCallback
-// React 라이브러리에서 useCallback Hook 가져오기
+// //!useCallback
+// // React 라이브러리에서 useCallback Hook 가져오기
 
-// Counter 컴포넌트 정의
-function Counter() {
-  // useState Hook 사용하여 count 상태 변수와 setCount 상태 변경 함수 선언
-  const [count, setCount] = useState(0);
+// // Counter 컴포넌트 정의
+// function Counter() {
+//   // useState Hook 사용하여 count 상태 변수와 setCount 상태 변경 함수 선언
+//   const [count, setCount] = useState(0);
 
-  // useCallback Hook 사용하여 increment 함수 메모이제이션
-  //함수의 실행 결과를 저장함으로써 동일한 입력에 대한 재계산을 방지하고 성능을 향상시키는 기법
-  // count가 변경될 때만 새로 생성
+//   // useCallback Hook 사용하여 increment 함수 메모이제이션
+//   //함수의 실행 결과를 저장함으로써 동일한 입력에 대한 재계산을 방지하고 성능을 향상시키는 기법
+//   // count가 변경될 때만 새로 생성
+//   /**
+//    * const test = useCallback(()=>{},[//함수 본문]//의존성 배열)
+//    * 첫번째 함수는 메모제이션 될 함수
+//    * 의존성 배열은 콜백함수가 의존하는 값의 배열. 배열 안의 값이 변경될 때만 콜백함수 생성
+//    */
+//   const increment = useCallback(() => {
+//     setCount(count + 1);
+//   }, [count]);
+
+//   // 컴포넌트가 렌더링하는 JSX 반환
+//   return (
+//     <div>
+//       {/* 상태 변수 count 값을 표시 */}
+//       <p>Count: {count}</p>
+//       {/* 버튼 클릭 시 increment 함수 호출하여 count 값을 1 증가 */}
+//       <button onClick={increment}>Increment</button>
+//     </div>
+//   );
+// }
+//!useMemo
+// React 라이브러리에서 useMemo Hook 가져오기
+
+// ExpensiveComponent 컴포넌트 정의
+function ExpensiveComponent({ a, b }) {
+  // useMemo Hook 사용하여 연산 결과를 메모이제이션
+  // a와 b가 변경될 때만 새로 계산
   /**
-   * const test = useCallback(()=>{},[//함수 본문]//의존성 배열)
-   * 첫번째 함수는 메모제이션 될 함수
-   * 의존성 배열은 콜백함수가 의존하는 값의 배열. 배열 안의 값이 변경될 때만 콜백함수 생성
+   * 성능 최적화를 위해 사용되며, 계산 비용이 많이 드는 연산의 결과를 메모이제이션하여 필요할 때만 다시 계산
+   * ExpensiveComponent는 a와 b라는 props를 받습니다. useMemo를 사용하여 expensiveValue를 계산할 때, a와 b가 변경될 때만 expensiveValue를 다시 계산합니다. 이는 useMemo의 두 번째 인자로 전달되는 의존성 배열 [a, b]을 통해 관리
    */
-  const increment = useCallback(() => {
-    setCount(count + 1);
-  }, [count]);
+  const expensiveValue = useMemo(() => {
+    console.log("Calculating expensive value...");
+    return a + b;
+  }, [a, b]); // 의존성 배열로 a와 b를 넣어줌
 
-  // 컴포넌트가 렌더링하는 JSX 반환
-  return (
-    <div>
-      {/* 상태 변수 count 값을 표시 */}
-      <p>Count: {count}</p>
-      {/* 버튼 클릭 시 increment 함수 호출하여 count 값을 1 증가 */}
-      <button onClick={increment}>Increment</button>
-    </div>
-  );
+  // 계산된 값인 expensiveValue를 JSX로 반환하여 렌더링
+  return <div>{expensiveValue}</div>;
 }
