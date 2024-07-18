@@ -22,3 +22,17 @@ document.addEventListener("click", () => {
 document.removeEventListener("click", () => {
   console.log("Document clicked");
 });
+
+//! useContext in JS
+// Vanilla JS 전역 상태 관리
+
+// 전역 상태 관리용 객체 생성
+const MyContext = {
+  value: "Hello, World!", // 전역 상태 값
+};
+
+// 전역 상태 값을 반환하는 함수 정의
+const getValue = () => MyContext.value;
+
+// 함수 호출하여 전역 상태 값 콘솔에 출력
+console.log(getValue()); // 'Hello, World!'
