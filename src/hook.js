@@ -73,3 +73,25 @@ const dispatch = (action) => {
 
 // 상태 변경 함수 호출, count를 1 증가
 dispatch({ type: "increment" }); // { count: 1 }
+
+//!useCallback
+// Vanilla JS에서 콜백 함수 메모이제이션은 직접 구현해야 함
+
+// memoizedCallback 변수를 초기화
+let memoizedCallback = null;
+
+// callback 함수 정의
+const callback = () => {
+  // memoizedCallback이 null인 경우 함수 생성
+  if (!memoizedCallback) {
+    memoizedCallback = () => {
+      console.log("Callback executed"); // 콜백 함수 실행 시 메시지 출력
+    };
+  }
+  // memoizedCallback 반환
+  return memoizedCallback;
+};
+
+// callback 함수 호출하여 콜백 함수 반환
+const cb = callback();
+cb(); // 'Callback executed'
