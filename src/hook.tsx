@@ -1,5 +1,11 @@
 // React 라이브러리에서 useState Hook 가져오기
-import React, { useState, useEffect, useContext, useReducer } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useReducer,
+  useCallback,
+} from "react";
 
 // // Counter 컴포넌트 정의
 // // function Counter() {
@@ -75,54 +81,84 @@ import React, { useState, useEffect, useContext, useReducer } from "react";
 //   );
 // }
 
-//!useReducer
-// React 라이브러리에서 useReducer Hook 가져오기
-/**
- * 복잡한 상태 관리가 필요할 때 사용하는 훅. 예를 들어 여러 개의 상태를 하나의 객체로 관리하거나, 상태 업데이트 로직이 복잡할 때 유용하다.
- * useReducer는 현재 상태와 액션을 받아 새로운 상태를 반환하는 함수인 리듀서와, 초기 상태를 인자로 받아 상태와 디스패치 함수를 반환
- */
+// //!useReducer
+// // React 라이브러리에서 useReducer Hook 가져오기
+// /**
+//  * 복잡한 상태 관리가 필요할 때 사용하는 훅. 예를 들어 여러 개의 상태를 하나의 객체로 관리하거나, 상태 업데이트 로직이 복잡할 때 유용하다.
+//  * useReducer는 현재 상태와 액션을 받아 새로운 상태를 반환하는 함수인 리듀서와, 초기 상태를 인자로 받아 상태와 디스패치 함수를 반환
+//  */
 
-// 초기 상태 객체 정의
-const initialState = { count: 0 };
+// // 초기 상태 객체 정의
+// const initialState = { count: 0 };
 
-// 리듀서 함수 정의
-//state는 현재 상태, action은 상태 변경의 객체
-function reducer(state, action) {
-  // action의 타입에 따라 상태 변경
-  switch (action.type) {
-    case "increment":
-      // count를 1 증가시키는 경우
-      return { count: state.count + 1 };
-    case "decrement":
-      // count를 1 감소시키는 경우
-      return { count: state.count - 1 };
-    default:
-      // 알 수 없는 action 타입인 경우 에러 발생
-      throw new Error();
-  }
-}
+// // 리듀서 함수 정의
+// //state는 현재 상태, action은 상태 변경의 객체
+// function reducer(state, action) {
+//   // action의 타입에 따라 상태 변경
+//   switch (action.type) {
+//     case "increment":
+//       // count를 1 증가시키는 경우
+//       return { count: state.count + 1 };
+//     case "decrement":
+//       // count를 1 감소시키는 경우
+//       return { count: state.count - 1 };
+//     default:
+//       // 알 수 없는 action 타입인 경우 에러 발생
+//       throw new Error();
+//   }
+// }
+
+// // Counter 컴포넌트 정의
+// function Counter() {
+//   // useReducer Hook 사용하여 상태와 상태 변경 함수 반환
+//   /**
+//    * 리듀서 함수 : 현재 상태와 액션을 받아 새로운 상태를 반환하는 함수
+//    * 초기 상태 : 리듀서 함수가 사용할 초기 상태
+//    * 디스패치 함수 : 액션을 리듀서 함수로 보내는 함수
+//    */
+//   // const [현재 state 변수 이름, action을 보내기 위한 함수 (상태를 변경 시 필요한 정보 전달)] = useReducer(리듀서 함수(dispatch를 확인해 state를 변경해주는 함수), 초기 상태(객체, 배열 등 다양한 값 가능));
+//   //state와 dispatch는 선언하지 않고 배열 구조분해 할당으로 할당한다.
+//   const [state, dispatch] = useReducer(reducer, initialState);
+
+//   // 컴포넌트가 렌더링하는 JSX 반환
+//   return (
+//     <div>
+//       {/* 상태 변수 state의 count 값을 표시 */}
+//       <p>Count: {state.count}</p>
+//       {/* 버튼 클릭 시 dispatch 함수 호출하여 count 값을 1 증가 */}
+//       <button onClick={() => dispatch({ type: "increment" })}>Increment</button>
+//       {/* 버튼 클릭 시 dispatch 함수 호출하여 count 값을 1 감소 */}
+//       <button onClick={() => dispatch({ type: "decrement" })}>Decrement</button>
+//     </div>
+//   );
+// }
+//!useCallback
+// React 라이브러리에서 useCallback Hook 가져오기
 
 // Counter 컴포넌트 정의
 function Counter() {
-  // useReducer Hook 사용하여 상태와 상태 변경 함수 반환
+  // useState Hook 사용하여 count 상태 변수와 setCount 상태 변경 함수 선언
+  const [count, setCount] = useState(0);
+
+  // useCallback Hook 사용하여 increment 함수 메모이제이션
+  //함수의 실행 결과를 저장함으로써 동일한 입력에 대한 재계산을 방지하고 성능을 향상시키는 기법
+  // count가 변경될 때만 새로 생성
   /**
-   * 리듀서 함수 : 현재 상태와 액션을 받아 새로운 상태를 반환하는 함수
-   * 초기 상태 : 리듀서 함수가 사용할 초기 상태
-   * 디스패치 함수 : 액션을 리듀서 함수로 보내는 함수
+   * const test = useCallback(()=>{},[//함수 본문]//의존성 배열)
+   * 첫번째 함수는 메모제이션 될 함수
+   * 의존성 배열은 콜백함수가 의존하는 값의 배열. 배열 안의 값이 변경될 때만 콜백함수 생성
    */
-  // const [현재 state 변수 이름, action을 보내기 위한 함수 (상태를 변경 시 필요한 정보 전달)] = useReducer(리듀서 함수(dispatch를 확인해 state를 변경해주는 함수), 초기 상태(객체, 배열 등 다양한 값 가능));
-  //state와 dispatch는 선언하지 않고 배열 구조분해 할당으로 할당한다.
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const increment = useCallback(() => {
+    setCount(count + 1);
+  }, [count]);
 
   // 컴포넌트가 렌더링하는 JSX 반환
   return (
     <div>
-      {/* 상태 변수 state의 count 값을 표시 */}
-      <p>Count: {state.count}</p>
-      {/* 버튼 클릭 시 dispatch 함수 호출하여 count 값을 1 증가 */}
-      <button onClick={() => dispatch({ type: "increment" })}>Increment</button>
-      {/* 버튼 클릭 시 dispatch 함수 호출하여 count 값을 1 감소 */}
-      <button onClick={() => dispatch({ type: "decrement" })}>Decrement</button>
+      {/* 상태 변수 count 값을 표시 */}
+      <p>Count: {count}</p>
+      {/* 버튼 클릭 시 increment 함수 호출하여 count 값을 1 증가 */}
+      <button onClick={increment}>Increment</button>
     </div>
   );
 }
